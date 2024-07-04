@@ -6,13 +6,12 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { ToastrService } from 'ngx-toastr';
 
-interface LoginForm {
-  email: FormControl,
-  password: FormControl
+interface forgotPasswordForm {
+  email: FormControl
 }
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-forgot-password',
   standalone: true,
   imports: [
     DefaultLoginLayoutComponent,
@@ -24,35 +23,34 @@ interface LoginForm {
     LoginService,
     
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.scss'
 })
-export class LoginComponent {
-  loginForm!: FormGroup<LoginForm>;
+export class ForgotPasswordComponent {
+  forgotPasswordForm!: FormGroup<forgotPasswordForm>;
 
   constructor(
     private router: Router,
     private loginService: LoginService,
     private toastService: ToastrService
   ){
-    this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    this.forgotPasswordForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email])
     })
   }
 
   submit(){
-    this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
-      next: () => this.toastService.success("Login feito com sucesso!"),
-      error: () => this.toastService.error("Erro inesperado! Tente novamente mais tarde")
+    this.loginService.forgotpassword(this.forgotPasswordForm.value.email).subscribe({
+      next: () => this.toastService.success("Email de recuperação enviado com sucesso!"),
+      error: () => this.toastService.error("Não foi possivel recuperar senha")
     })
   }
 
   navigate(){
-    this.router.navigate(["signup"])
+    this.router.navigate(["login"])
   }
 
-  forgotpassword(){
-    this.router.navigate(["forgot-password"])
+  navigateRegister(){
+    this.router.navigate(["signup"])
   }
 }
